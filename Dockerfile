@@ -4,10 +4,14 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir fastapi "uvicorn[standard]" pydantic
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY models.py .
 COPY server/ ./server/
+COPY client.py .
+COPY inference.py .
+COPY .env.example .env
 
 EXPOSE 8000
 

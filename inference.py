@@ -211,7 +211,7 @@ def call_llm(system: str, user: str, max_tokens: int) -> dict:
             err = str(e)
             if "rate_limit" in err.lower() or "429" in err:
                 wait = 30 * (attempt + 1)
-                debug(f"[DEBUG] rate limit, sleeping {wait}s", flush=True)
+                debug(f"[DEBUG] rate limit, sleeping {wait}s")
                 time.sleep(wait)
             else:
                 debug(f"[DEBUG] LLM error: {err}", flush=True)
