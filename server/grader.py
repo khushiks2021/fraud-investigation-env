@@ -34,13 +34,12 @@ def _fuzzy_match(a: str, b: str) -> bool:
 
 
 def _safe_score(reward: float) -> float:
-    score = reward
+    score = round(reward,2)
 
-    # 🔥 HARD clamp BEFORE any rounding
-    if score >= 1.0:
-        score = 0.99
-    elif score <= 0.0:
-        score = 0.01
+    if score >= 0.99:
+        score = 0.98
+    elif score <= 0.01:
+        score = 0.02
 
     return score
 

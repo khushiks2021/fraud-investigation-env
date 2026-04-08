@@ -102,7 +102,7 @@ class FraudEnvironment:
         truth = self.current_case["truth"]
         reward, feedback = grade(action, truth, self.current_task)
 
-        reward = max(0.01, min(0.99, reward))
+        reward = max(0.02, min(0.98, reward))
 
         self.total_reward += reward
         self.is_done = True

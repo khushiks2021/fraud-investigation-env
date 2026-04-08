@@ -287,8 +287,8 @@ def run_episode(env: FraudEnvClient, task: str, episode_num: int) -> float:
             print()
             return 0.02
 
-    step_rewards.append(0.0)
-    print(f"[STEP] step=1 action={hyp_str} reward=0.00 done=false error={error1}", flush=True)
+    step_rewards.append(0.01)
+    print(f"[STEP] step=1 action={hyp_str} reward=0.01 done=false error={error1}", flush=True)
     time.sleep(1)
 
     # ── Step 2: submit_decision ────────────
