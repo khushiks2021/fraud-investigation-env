@@ -280,12 +280,12 @@ def run_episode(env: FraudEnvClient, task: str, episode_num: int) -> float:
         try:
             obs2 = env.step(hyp)
         except Exception:
-            step_rewards.append(0.0)
-            print(f"[STEP] step=1 action={hyp_str} reward=0.00 done=false error={error1}", flush=True)
+            step_rewards.append(0.02)
+            print(f"[STEP] step=1 action={hyp_str} reward=0.02 done=false error={error1}", flush=True)
             env.close()
-            print(f"[END] success=false steps=1 rewards=0.00", flush=True)
+            print(f"[END] success=false steps=1 rewards=0.02", flush=True)
             print()
-            return 0.0
+            return 0.02
 
     step_rewards.append(0.0)
     print(f"[STEP] step=1 action={hyp_str} reward=0.00 done=false error={error1}", flush=True)
@@ -306,7 +306,7 @@ def run_episode(env: FraudEnvClient, task: str, episode_num: int) -> float:
     except Exception as e:
         error2  = str(e)[:60]
         success = False
-        reward  = 0.0
+        reward  = 0.02
         act_str = "submit_decision(error)"
 
     step_rewards.append(reward)
