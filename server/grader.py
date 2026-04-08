@@ -2,12 +2,6 @@ from models import FraudAction
 
 
 def _match_signals(agent_signals: list[str], truth_signals: list[str]) -> int:
-    """
-    Fuzzy match agent evidence against ground truth signals.
-
-    Strategy:
-    If ≥50% of words in a truth signal appear in any agent signal → match
-    """
     matched = 0
 
     for truth_sig in truth_signals:
@@ -27,9 +21,6 @@ def _match_signals(agent_signals: list[str], truth_signals: list[str]) -> int:
 
 
 def _fuzzy_match(a: str, b: str) -> bool:
-    """
-    Fuzzy match for attack vectors using word overlap coverage.
-    """
     if not a or not b:
         return False
 
@@ -42,6 +33,14 @@ def _fuzzy_match(a: str, b: str) -> bool:
     return coverage >= 0.5
 
 
+def _safe_score(reward: float) -> float:
+    """
+    Ensure score is strictly within (0,1) AFTER rounding.
+    """
+    score = round(reward, 2)
+    return max(0.02, min(0.98, score))
+
+
 def grade(action: FraudAction, truth: dict, task: str) -> tuple[float, str]:
     if task == "task_easy":
         return _grade_task1(action, truth)
@@ -50,7 +49,7 @@ def grade(action: FraudAction, truth: dict, task: str) -> tuple[float, str]:
     elif task == "task_hard":
         return _grade_task3(action, truth)
 
-    return 0.0, "Unknown task"
+    return 0.02, "Unknown task"
 
 
 def _grade_task1(action: FraudAction, truth: dict) -> tuple[float, str]:
@@ -89,7 +88,8 @@ def _grade_task1(action: FraudAction, truth: dict) -> tuple[float, str]:
     confidence_score = 1.0 - abs(action.confidence - expected_confidence)
     reward += 0.10 * confidence_score
 
-    return round(max(0.01, min(0.99, reward)), 2), "\n".join(feedback)
+    score = _safe_score(reward)
+    return score, "\n".join(feedback)
 
 
 def _grade_task2(action: FraudAction, truth: dict) -> tuple[float, str]:
@@ -128,7 +128,8 @@ def _grade_task2(action: FraudAction, truth: dict) -> tuple[float, str]:
     reasoning_score = min(len(action.reasoning.split()) / 100, 1.0)
     reward += 0.10 * reasoning_score
 
-    return round(max(0.01, min(0.99, reward)), 2), "\n".join(feedback)
+    score = _safe_score(reward)
+    return score, "\n".join(feedback)
 
 
 def _grade_task3(action: FraudAction, truth: dict) -> tuple[float, str]:
@@ -168,4 +169,5 @@ def _grade_task3(action: FraudAction, truth: dict) -> tuple[float, str]:
     reasoning_score = min(len(action.reasoning.split()) / 150, 1.0)
     reward += 0.10 * reasoning_score
 
-    return round(max(0.01, min(0.99, reward)), 2), "\n".join(feedback)
+    score = _safe_score(reward)
+    return score, "\n".join(feedback)
