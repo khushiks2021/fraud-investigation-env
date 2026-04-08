@@ -37,12 +37,12 @@ def _safe_score(reward: float) -> float:
     score = reward
 
     # 🔥 HARD clamp BEFORE any rounding
-    if score >= 0.99:
-        score = 0.98
-    elif score <= 0.01:
-        score = 0.02
+    if score >= 1.0:
+        score = 0.99
+    elif score <= 0.0:
+        score = 0.01
 
-    return round(score, 2)
+    return score
 
 
 def grade(action: FraudAction, truth: dict, task: str) -> tuple[float, str]:
