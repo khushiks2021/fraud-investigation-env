@@ -54,7 +54,7 @@ class FraudEnvironment:
             account_events=[],
             linked_accounts=[],
             additional_signals={},
-            reward=0.0,
+            reward=0.01,
             done=False,
             feedback=(
                 "Step 1 of 2: You see account profile and transactions. "
@@ -89,7 +89,7 @@ class FraudEnvironment:
                 account_events=full.account_events,
                 linked_accounts=full.linked_accounts,
                 additional_signals=full.additional_signals,
-                reward=0.0,
+                reward=0.01,
                 done=False,
                 feedback=(
                     "Step 2 of 2: Full data revealed — login events, account changes, "
@@ -102,8 +102,11 @@ class FraudEnvironment:
         truth = self.current_case["truth"]
         reward, feedback = grade(action, truth, self.current_task)
 
+        if reward >= 0.99:
+            reward = 0.97
+        elif reward <= 0.01:
+            reward = 0.02
         reward = max(0.02, min(0.98, reward))
-
         self.total_reward += reward
         self.is_done = True
 

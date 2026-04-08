@@ -78,7 +78,7 @@ Financial fraud costs banks billions annually. This environment simulates real i
   "account_events": [...],
   "linked_accounts": [...],
   "additional_signals": { "distance_km": 8200, ... },
-  "reward": 0.0,
+  "reward": 0.01,
   "done": false,
   "feedback": "..."
 }

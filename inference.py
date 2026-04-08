@@ -19,7 +19,7 @@ API_KEY      = GROQ_API_KEY or HF_TOKEN
 API_BASE_URL      = os.environ.get("API_BASE_URL", "https://api.groq.com/openai/v1")
 MODEL_NAME        = os.environ.get("MODEL_NAME",   "llama-3.1-8b-instant")
 ENV_URL           = os.environ.get("ENV_URL",       "http://localhost:8000")
-EPISODES_PER_TASK = int(os.environ.get("EPISODES_PER_TASK", "2"))
+EPISODES_PER_TASK = int(os.environ.get("EPISODES_PER_TASK", "3"))
 
 ENV_NAME = "fraud-investigation"
 
@@ -57,7 +57,6 @@ DECISION RULES:
 - 5+ txns in 10 mins all CNP → velocity fraud, block_card
 - New device + password/email/phone change + large wire → account_takeover, freeze_account
 - Multiple accounts same SSN/device, structured deposits → money_mule, freeze_account + SAR
-- Flight booking found + destination matches txn → legitimate, allow
 
 IMPORTANT: Use ONLY account IDs from the input. Do NOT invent IDs.
 
@@ -335,7 +334,7 @@ def run_task(env: FraudEnvClient, task: str, n_episodes: int) -> dict:
             time.sleep(2)
 
     avg   = sum(rewards) / len(rewards)
-    best  = max(rewards)
+    best = min(max(rewards), 0.99)
     worst = min(rewards)
     debug(f"[DEBUG] {task} | avg={avg:.2f} best={best:.2f} worst={worst:.2f}")
     return {"task": task, "episodes": n_episodes, "rewards": rewards,

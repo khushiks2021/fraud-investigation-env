@@ -62,6 +62,10 @@ def reset(request: Optional[ResetRequest] = None):
     try:
         task = request.task if request else "task_easy"
         obs = env.reset(task=task)
+        if obs.reward >= 0.99:
+            obs.reward = 0.95
+        elif obs.reward <= 0.01:
+            obs.reward = 0.02
         return obs
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -74,6 +78,10 @@ def step(request: StepRequest):
     """Submit fraud analysis decision. Returns reward + feedback."""
     try:
         obs = env.step(request.action)
+        if obs.reward >= 0.99:
+            obs.reward = 0.95
+        elif obs.reward <= 0.01:
+            obs.reward = 0.02
         return obs
     except RuntimeError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -88,7 +96,6 @@ def state():
         return env.state()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @app.get("/tasks")
 def list_tasks():

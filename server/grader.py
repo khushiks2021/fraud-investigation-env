@@ -53,7 +53,12 @@ def grade(action: FraudAction, truth: dict, task: str) -> tuple[float, str]:
         return _grade_task3(action, truth)
 
     return 0.02, "Unknown task"
+    if score >= 0.99:
+        score = 0.97
+    elif score <= 0.01:
+        score = 0.02
 
+    return round(score, 2), feedback
 
 def _grade_task1(action: FraudAction, truth: dict) -> tuple[float, str]:
     reward = 0.0
@@ -128,8 +133,6 @@ def _grade_task2(action: FraudAction, truth: dict) -> tuple[float, str]:
     if action.is_fraud and not truth["is_fraud"]:
         reward -= 0.10
 
-    reasoning_score = min(len(action.reasoning.split()) / 100, 1.0)
-    reward += 0.10 * reasoning_score
 
     score = _safe_score(reward)
     return score, "\n".join(feedback)
