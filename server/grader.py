@@ -34,11 +34,15 @@ def _fuzzy_match(a: str, b: str) -> bool:
 
 
 def _safe_score(reward: float) -> float:
-    """
-    Ensure score is strictly within (0,1) AFTER rounding.
-    """
-    score = round(reward, 2)
-    return max(0.02, min(0.98, score))
+    score = reward
+
+    # 🔥 HARD clamp BEFORE any rounding
+    if score >= 0.99:
+        score = 0.98
+    elif score <= 0.01:
+        score = 0.02
+
+    return round(score, 2)
 
 
 def grade(action: FraudAction, truth: dict, task: str) -> tuple[float, str]:
