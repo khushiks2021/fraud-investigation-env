@@ -89,7 +89,7 @@ def _grade_task1(action: FraudAction, truth: dict) -> tuple[float, str]:
     confidence_score = 1.0 - abs(action.confidence - expected_confidence)
     reward += 0.10 * confidence_score
 
-    return round(max(0.0, min(1.0, reward)), 2), "\n".join(feedback)
+    return round(max(0.01, min(0.99, reward)), 2), "\n".join(feedback)
 
 
 def _grade_task2(action: FraudAction, truth: dict) -> tuple[float, str]:
@@ -128,7 +128,7 @@ def _grade_task2(action: FraudAction, truth: dict) -> tuple[float, str]:
     reasoning_score = min(len(action.reasoning.split()) / 100, 1.0)
     reward += 0.10 * reasoning_score
 
-    return round(max(0.0, min(1.0, reward)), 2), "\n".join(feedback)
+    return round(max(0.01, min(0.99, reward)), 2), "\n".join(feedback)
 
 
 def _grade_task3(action: FraudAction, truth: dict) -> tuple[float, str]:
@@ -168,4 +168,4 @@ def _grade_task3(action: FraudAction, truth: dict) -> tuple[float, str]:
     reasoning_score = min(len(action.reasoning.split()) / 150, 1.0)
     reward += 0.10 * reasoning_score
 
-    return round(max(0.0, min(1.0, reward)), 2), "\n".join(feedback)
+    return round(max(0.01, min(0.99, reward)), 2), "\n".join(feedback)
